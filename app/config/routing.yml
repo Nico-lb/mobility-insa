@@ -1,0 +1,10 @@
+mobility_user:
+    resource: "@MobilityUserBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+mobility_main:
+    resource: "@MobilityMainBundle/Controller/"
+    type:     annotation
+    prefix:   /
+

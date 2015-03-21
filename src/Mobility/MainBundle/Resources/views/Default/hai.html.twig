@@ -1,0 +1,148 @@
+{% extends "::base.html.twig" %}
+
+{% block page_title %}Accueil{% endblock %}
+
+{% block content %}
+	<form class="form-horizontal" action="action_page.php">
+		<fieldset>
+			
+			<div class='container'>
+				<div class="row"><legend class="col-md-12" style='color:white'></legend></div>
+				<div class="form-group">
+					<label class='col-md-2' for="nom">Nom</label>
+					<input class='col-md-6' type="text" class="form-control" id="nom" value="Votre nom">
+				</div>
+
+				<div class="form-group">
+					<label class='col-md-2' for="prenom">Prenom</label>
+					<input class='col-md-6' type="text" class="form-control" id="prenom" placeholder="Votre prenom">
+				</div>
+
+				<div class="form-group">
+					<label class='col-md-2' for="prenom">Sex</label>
+					<label class="col-md-1"><input type="radio" name="sex" value="male" checked>Male</label>
+					<label class="col-md-2"><input type="radio" name="sex" value="female">Female</label>
+				</div>
+
+				<div class="form-group">
+					<label class='col-md-2' for="mail">Email</label>
+					<input class='col-md-6' type="email" class="form-control" id="email" placeholder="Votre email">
+				</div>
+				
+				<br>
+				
+					<table class="table table-hover" style='border-collapse:none' border="1px" >
+						<tr>
+							<td class="col-md-1" style='text-align:center'>Matiere</td>
+							<td class="col-md-2" style='text-align:center'>Matiere1</td>
+							<td class="col-md-2" style='text-align:center'>Matiere2</td>
+							<td class="col-md-2" style='text-align:center'>Matiere3</td>
+							<td class="col-md-2" style='text-align:center'>Matiere4</td>
+						</tr>
+						<tr>
+							<td style='text-align:center'>Credit</td>
+							<td style='text-align:center'>Matiere1</td>
+							<td style='text-align:center'>Matiere2</td>
+							<td style='text-align:center'>Matiere3</td>
+							<td style='text-align:center'>Matiere4</td>
+						</tr>
+						<tr>
+							<td style='text-align:center'>Notes</td>
+							<td style='text-align:center'><input type="text" name="note1" value="Mat1" style='color:black'></td>
+							<td style='text-align:center'><input type="text" name="note2" value="Mat2" style='color:black'></td>
+							<td style='text-align:center'><input type="text" name="note3" value="Mat3" style='color:black'></td>
+							<td style='text-align:center'><input type="text" name="note4" value="Mat4" style='color:black'></td>
+						</tr>
+						<tr>
+							<td style='text-align:center'>Moyenne</td>
+							<td style='text-align:center' colspan='4'>Note calculee</td>
+						</tr>
+					</table>
+				
+
+				<br>
+				<div class="form-group">
+					<div class='row'>
+						<label class='col-md-2' for="voeux">Voeux1</label>
+						<input class='col-md-6' type="text" class="form-control" id="voeux1" placeholder="Voeux1">
+					</div>
+					<br>
+					<div class='row'>
+						<label class='col-md-2' for="voeux">Voeux2</label>
+						<input class='col-md-6' type="text" class="form-control" id="voeux2" placeholder="Voeux2">
+					</div>
+					<br>
+					<div class='row'>
+						<label class='col-md-2' for="voeux">Voeux3</label>
+						<input class='col-md-6' type="text" class="form-control" id="voeux3" placeholder="Voeux3">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-5" style='text-align:center'><input type="submit" value="Submit" style='color:black'></div>
+				</div>
+
+						 <div class="row">
+							<div class="col-md-2">Prenom</div>
+							<div class="col-md-2"><input type="text" name="prenom" value="Votre prenom" style='color:black'></div>
+						</div>	
+						<br>
+						<div class="row">
+							<div class="col-md-2">Nom</div>
+							<div class="col-md-2"><input type="text" name="nom" value="Votre nom" style='color:black'></div>
+						</div>	
+						<br>
+						<div class="row">
+							<div class="col-md-2">Sex</div>
+							<div class="col-md-1"><input type="radio" name="sex" value="male" checked>Male</div>
+							<div class="col-md-1"> <input type="radio" name="sex" value="female">Female</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-2">Email</div>
+							<div class="col-md-2"><input type="text" name="email" value="Votre email" style='color:black'></div>
+						</div>
+						<br>
+						<div class="row">
+							<table style='border-collapse:none' border="1px" >
+								<tr>
+									<th style='text-align:center'>Matiere</th>
+									<th style='text-align:center'>Matiere1</th>
+									<th style='text-align:center'>Matiere2</th>
+									<th style='text-align:center'>Matiere3</th>
+									<th style='text-align:center'>Matiere4</th>
+								</tr>
+								<tr>
+									<th style='text-align:center'>Credit</th>
+									<th style='text-align:center'>Matiere1</th>
+									<th style='text-align:center'>Matiere2</th>
+									<th style='text-align:center'>Matiere3</th>
+									<th style='text-align:center'>Matiere4</th>
+								</tr>
+								<tr>
+									<th style='text-align:center'>Notes</th>
+									<th style='text-align:center'><input type="text" name="note1" value="Mat1" style='color:black'></th>
+									<th style='text-align:center'><input type="text" name="note2" value="Mat2" style='color:black'></th>
+									<th style='text-align:center'><input type="text" name="note3" value="Mat3" style='color:black'></th>
+									<th style='text-align:center'><input type="text" name="note4" value="Mat4" style='color:black'></th>
+								</tr>
+								<tr>
+									<th style='text-align:center'>Moyenne</th>
+									<th style='text-align:center' colspan='4'>Note calculee</th>
+								</tr>
+							</table>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-5" style='text-align:center'><input type="submit" value="Submit" style='color:black'></div>
+						</div>
+					</div>
+				</fieldset>
+			</form> 
+			
+			<p class="lead">	
+			</p>
+
+			<p><a href="#" class="btn btn-success">Completed</a></p>
+		</div>
+	</div>
+{% endblock %}
