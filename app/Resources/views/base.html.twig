@@ -1,69 +1,98 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mobilité à l'international</title>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Mobilité à l'international</title>
 
-    {% block stylesheets %}
-        {% stylesheets filter='cssrewrite, ?yui_css'
+        {% block stylesheets %}
+            {% stylesheets filter='cssrewrite, ?yui_css'
             'assets/bootstrap/css/bootstrap.css'
             'assets/bootstrap/css/bootstrap-theme.css'
-            'assets/bootstrap/css/cover.css'
             'assets/css/design.css' %}
-        <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
-        {% endstylesheets %}
-    {% endblock %}
+            <link rel="stylesheet" href="{{ asset_url }}" type="text/css" />
+            {% endstylesheets %}
+        {% endblock %}
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
         {% javascripts filter='?yui_js'
-            'assets/js/html5shiv.js'
-            'assets/js/respond.min.js' %}
+        'assets/bootstrap/js/html5shiv.min.js'
+        'assets/bootstrap/js/respond.min.js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
         {% endjavascripts %}
-    <![endif]-->
-</head>
+        <![endif]-->
+    </head>
 
-<body>
-    <div class="site-wrapper">
-        <div class="site-wrapper-inner">
-            <div class="cover-container">
-                <div class="masthead clearfix">
-                    <div class="inner">
-                        <h3 class="masthead-brand">Mobilité à l'international</h3>
-                        <nav>
-                            <ul class="nav masthead-nav">
-                                <li class="active"><a href="#">Accueil</a></li>
-                                <li><a href="#">Aide</a></li>
-                                <li><a href="#">Contact</a></li>
-                            </ul>
-                        </nav>
-                    </div>
+    <body role="document">
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ path('main_index') }}">Mobilité à l'international</a>
                 </div>
-
-                <div class="inner cover">
-                    <h1>{% block page_title %}{% endblock %}</h1>
-
-                    {% block content %}{% endblock %}
-                </div>
-
-                <div class="mastfoot">
-                    <div class="inner">
-                        <p>Song-Hai Nguyen &amp; Nicolas Le Borgne</p>
-                    </div>
-                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    {{ knp_menu_render('MobilityMainBundle:Builder:mainMenu', {'currentClass': 'active'}) }}
+                    {% if app.user is not null and is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a href="{{ path('main_admin') }}" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+                                {{ knp_menu_render('MobilityMainBundle:Builder:adminMenu', {'currentClass': 'active'}) }}
+                            </li>
+                        </ul>
+                    {% endif %}
+                </div><!--/.nav-collapse -->
             </div>
+        </nav>
+
+        <div class="container">
+            {% for flashMessage in app.session.flashbag.get('success') %}
+                <div class="alert alert-success">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+            
+            {% for flashMessage in app.session.flashbag.get('info') %}
+                <div class="alert alert-info">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+            
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <div class="alert alert-danger">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+            
+            {% for flashMessage in app.session.flashbag.get('warning') %}
+                <div class="alert alert-warning">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+
+            <div class="page-header">
+                <h1>{% block page_title %}{% endblock %}</h1>
+            </div>
+
+            {% block content %}{% endblock %}
         </div>
 
         {% block javascripts %}
             {% javascripts filter='?yui_js'
-                'assets/bootstrap/js/jquery.min.js'
-                'assets/bootstrap/js/bootstrap.min.js' %}
+            'assets/bootstrap/js/jquery.min.js'
+            'assets/bootstrap/js/bootstrap.min.js'
+            'assets/bootstrap/js/docs.js'
+            'assets/bootstrap/js/ie10-viewport-bug-workaround.js' %}
             <script type="text/javascript" src="{{ asset_url }}"></script>
             {% endjavascripts %}
         {% endblock %}
     </body>
-    </html>
+</html>

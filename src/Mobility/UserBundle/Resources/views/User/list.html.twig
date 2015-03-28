@@ -1,0 +1,29 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block page_title %}<a href="{{ path('main_admin') }}">Administration</a> - Gestion des comptes{% endblock %}
+
+{% block fos_user_content %}    
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+            <tr>
+                <th>Nom d'utilisateur</th>
+                <th>Adresse e-mail</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for u in users %}
+            <tr>
+                <td>{{ u.username }}</td>
+                <td>{{ u.email }}</td>
+                <td><a href="{{ path('user_remove', {'id': u.id}) }}" title="Supprimer"><span class="glyphicon glyphicon-remove" style="color: #CE0404;"></span></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        
+    <p style="text-align: right;">
+        <a href="{{ path('fos_user_registration_register') }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+    </p>
+{% endblock fos_user_content %}

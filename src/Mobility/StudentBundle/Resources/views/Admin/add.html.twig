@@ -1,0 +1,7 @@
+{% extends "MobilityStudentBundle::layout.html.twig" %}
+
+{% block page_title %}{{ parent() }} - Ajouter un étudiant{% endblock %}
+
+{% block content_body %}
+    {% include "MobilityStudentBundle:Admin:student_form.html.twig" %}
+{% endblock %}

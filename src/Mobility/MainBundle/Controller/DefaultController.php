@@ -18,6 +18,15 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/demo", name="main_demo")
+     * @Template()
+     */
+    public function demoAction()
+    {
+        return array();
+    }
+
+    /**
      * @Route("/hai", name="main_hai")
      * @Template()
      */

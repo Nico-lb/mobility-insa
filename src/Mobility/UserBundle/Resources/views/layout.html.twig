@@ -1,0 +1,16 @@
+{% extends "::base.html.twig" %}
+
+{% block content %}    
+    <div class="container well">    
+        {% for key, message in app.session.flashbag.all() %}
+            <div class="alert alert-{{ key }}">
+                {% for msg in message %}
+                    {{ msg }}<br />
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        {% block fos_user_content %}
+        {% endblock fos_user_content %}
+    </div>
+{% endblock %}

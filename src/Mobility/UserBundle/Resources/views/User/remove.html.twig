@@ -1,0 +1,14 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block page_title %}<a href="{{ path('main_admin') }}">Administration</a> - Supprimer un compte{% endblock %}
+
+{% block fos_user_content %}
+    <div class="text-center">
+        <p>Vous êtes sur le point de supprimer l'utilisateur "{{ user.username }}".</p>
+        
+        <p>
+            <a href="{{ path('bde_user_remove_confirm', {'id': user.id, 'token': csrf_token('remove_user')}) }}" class="button">Confirmer</a>
+            <a href="{{ path('bde_user_list') }}" class="button">Annuler</a>
+        </p>
+    </div>
+{% endblock fos_user_content %}

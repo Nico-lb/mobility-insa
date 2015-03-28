@@ -1,0 +1,14 @@
+{% extends "MobilityMainBundle:Admin:layout.html.twig" %}
+
+{% block content %}
+<div class="well">
+    <div class="list-group">
+        <a class="list-group-item " href="{{ path('user_list') }}">Gestion des utilisateurs</a>
+    </div>
+        
+    <div class="list-group">
+        <a class="list-group-item" href="{{ path('student_list') }}">Gestion des étudiants</a>
+        <a class="list-group-item" href="{{ path('university_list') }}">Gestion des universités</a>
+    </div>
+</div>
+{% endblock %}

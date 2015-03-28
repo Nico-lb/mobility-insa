@@ -1,0 +1,49 @@
+<form method="post" class="mobility-form" {{ form_enctype(form) }}>
+    {% form_theme form ':Form:form_errors.html.twig' %}
+
+    {{ form_errors(form) }}
+
+    {{ form_errors(form.name) }}
+    <p>
+        {{ form_label(form.name) }}
+        {{ form_widget(form.name) }}
+    </p>
+
+    {{ form_errors(form.country) }}
+    <p>
+        {{ form_label(form.country) }}
+        {{ form_widget(form.country) }}
+    </p>
+
+    <p class="form-checkbox">
+        {{ form_errors(form.europe) }}
+        <span>{{ form_widget(form.europe) }}</span>
+        {{ form_label(form.europe) }}
+    </p>
+
+    <p class="form-checkbox">
+        {{ form_errors(form.dualDegree) }}
+        <span>{{ form_widget(form.dualDegree) }}</span>
+        {{ form_label(form.dualDegree) }}
+    </p>
+
+    {{ form_errors(form.places) }}
+    <p>
+        {{ form_label(form.places) }}
+        {{ form_widget(form.places) }}
+        <span class="info">Mettre <b>-1</b> si le nombre de places n'est pas défini.</span>
+    </p>
+
+    <p class="form-checkbox">
+        {{ form_errors(form.partnershipState) }}
+        <span>{{ form_widget(form.partnershipState) }}</span>
+        {{ form_label(form.partnershipState) }}
+    </p>
+
+    {{ form_rest(form) }}
+
+    <p>
+        <input type="submit" class="btn btn-primary push" value="Envoyer" />
+    </p>
+</form>
+    

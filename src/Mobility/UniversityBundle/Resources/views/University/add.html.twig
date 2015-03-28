@@ -1,0 +1,7 @@
+{% extends "MobilityUniversityBundle::layout.html.twig" %}
+
+{% block page_title %}{{ parent() }} - Ajouter une université{% endblock %}
+
+{% block content_body %}
+    {% include "MobilityUniversityBundle:University:university_form.html.twig" %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "MobilityStudentBundle::layout.html.twig" %}
+
+{% block page_title %}<a href="{{ path('main_admin') }}">Administration</a> - Gestion des étudiants{% endblock %}
+
+{% block content_body %}
+<p style="text-align: right;">
+    <a href="{{ path('student_add') }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+    <a href="" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un lot</a>
+</p>
+
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>E-mail</th>
+            <th>Promo</th>
+            <th>Statut</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        {% for s in students %}
+        <tr>
+            <td>{{ s.surname|title }}</td>
+            <td>{{ s.firstname|title }}</td>
+            <td><a href="mailto:{{ s.email }}">{{ s.email }}</a></td>
+            <td>{{ s.promo }}</td>
+            <td>-</td>
+            <td>
+                <a href="{{ path('student_edit', {'id': s.id}) }}" title="Modifer" style="margin: 0 5px;"><span class="glyphicon glyphicon-wrench" style="color: #939090;"></span></a>
+                <a href="{{ path('student_remove', {'id': s.id}) }}" title="Supprimer" style="margin: 0 5px;"><span class="glyphicon glyphicon-remove" style="color: #CE0404;"></span></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,19 +1,21 @@
 <?php
 
-namespace Mobility\UserBundle\Controller;
+namespace Mobility\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-class DefaultController extends Controller
+/**
+ * @Route("/admin")
+ */
+class AdminController extends Controller
 {
     /**
-     * @Route("/hello/{name}")
+     * @Route("/", name="main_admin")
      * @Template()
      */
-    public function indexAction($name)
-    {
-        return array('name' => $name);
+    public function indexAction() {
+        return array();
     }
 }
