@@ -1,0 +1,9 @@
+
+A la fin de la période de saisie des voeux :
+	- procéder au verrouillage via le module "Gestion des voeux"
+	- faire une sauvegarde CSV de l'état des voeux au moment du verrouillage (soit directement lorsque c'est proposé, soit via le module Gestion des voeux)
+
+	- procéder à la saisie du classement via le module "Gestion des étudiants" (peut être fait à n'importe quel moment, mais antérieurement au calcul des affectations)
+	- si nécessaire, ajouter les affectations définitives dans le module Gestion des affectations
+	- procéder au calcul des affectations temporaires via le module Gestion des affectations
+	- si le résultat est satisfaisant, le rendre public (même module). Les étudiants reçoivent automatiquement un mail.

@@ -1,0 +1,22 @@
+state -1:
+	pas d'affectation
+
+state 0 (état initial) :
+	choix des voeux
+
+state 1:
+	voeux verrouillés pour les étudiants
+	possibilité de voir les affectations si le calcul est fait
+
+state 2:
+	accès à la liste des démarches à effectuer ainsi qu'aux documents à télécharger.
+	accès au dépôt pour le contrat d'étude
+
+state 3:
+	contrat déposé et validé par le correspondant RI
+	accès à la liste des démarches restantes
+
+state 4:
+	étudiant à l'étranger
+	accès au dépôt pour les modifications du contrat d'étude
+	saisie des notes obtenues + dépôt du justificatif
