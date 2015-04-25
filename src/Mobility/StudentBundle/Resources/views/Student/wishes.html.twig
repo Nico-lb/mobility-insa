@@ -1,0 +1,44 @@
+{% extends "MobilityStudentBundle::layout.html.twig" %}
+
+{% block page_title %}Voeux de mobilité{% endblock %}
+
+{% block content_body %}
+	<table class="table table-bordered table-striped table-condensed">
+	    <thead>
+	        <tr>
+	            <th>Voeu</th>
+	            <th>Université</th>
+	            <th>Actions</th>
+	        </tr>
+	    </thead>
+	    
+	    <tbody>
+	        {% for w in student.wishes %}
+	        <tr>
+	            <td>{{ w.priority }}</td>
+	            <td>{{ w.university.name }}</td>
+
+	            <td>
+	                <a href="{{ path('student_editwish', {'id':student.id, 'auth':student.auth, 'wish':w.priority}) }}" title="Modifer" style="margin: 0 5px;"><span class="glyphicon glyphicon-wrench" style="color: #939090;"></span></a>
+	                <a href="{{ path('student_removewish', {'id':student.id, 'auth':student.auth, 'wish':w.priority}) }}" title="Supprimer" style="margin: 0 5px;"><span class="glyphicon glyphicon-remove" style="color: #939090;"></span></a>
+	            </td>
+	        </tr>
+	        {% endfor %}
+	    </tbody>
+	</table>
+
+    <form method="post" class="mobility-form" {{ form_enctype(form) }}>
+	    {% form_theme form ':Form:form_errors.html.twig' %}
+
+	    {{ form_errors(form) }}
+
+	    <p>
+	        {{ form_label(form.university) }}
+	    	{{ form_errors(form.university) }}
+	        {{ form_widget(form.university) }}
+	        <input type="submit" class="btn btn-success" style="margin-left: 20px;" value="Ajouter" />
+	    </p>
+
+	    {{ form_rest(form) }}
+	</form>
+{% endblock %}

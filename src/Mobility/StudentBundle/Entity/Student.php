@@ -3,6 +3,7 @@
 namespace Mobility\StudentBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Student
@@ -59,12 +60,19 @@ class Student
     /**
      * @var integer
      *
+     * @ORM\Column(name="rank", type="integer")
+     */
+    private $rank;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="state", type="integer")
      */
     private $state;
     
     /**
-     * @ORM\OneToMany(targetEntity="Mobility\StudentBundle\Entity\Wish", mappedBy="wish", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Mobility\StudentBundle\Entity\Wish", mappedBy="student", cascade={"remove"})
      * @ORM\OrderBy({"priority" = "ASC"})
      */
     private $wishes;
@@ -72,8 +80,9 @@ class Student
     
     public function __construct() {
         $this->state = 0;
+        $this->rank = 0;
         $this->wishes = new ArrayCollection();
-        
+
         srand(time());
         $this->auth = sha1(rand());
     }
@@ -224,6 +233,29 @@ class Student
     public function getPromo()
     {
         return $this->promo;
+    }
+
+    /**
+     * Set rank
+     *
+     * @param integer $rank
+     * @return Student
+     */
+    public function setRank($rank)
+    {
+        $this->rank = $rank;
+
+        return $this;
+    }
+
+    /**
+     * Get rank
+     *
+     * @return integer 
+     */
+    public function getRank()
+    {
+        return $this->rank;
     }
 
     /**

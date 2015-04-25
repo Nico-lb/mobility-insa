@@ -1,0 +1,28 @@
+{% extends "MobilityStudentBundle:Admin:studentLayout.html.twig" %}
+
+{% block page_title %}{{ parent() }} - Ajouter un lot d'étudiants{% endblock %}
+
+{% block content_body %}
+    <p style="text-align: center; margin-bottom: 20px;">
+		<strong>Format :</strong> Une entrée par ligne, les colonnes doivent être séparées par des point-virgules (;).<br />
+		<strong>En-tête :</strong> Nom;Prénom;E-mail;Promo
+	</p>
+
+    <form method="post" class="mobility-form" {{ form_enctype(form) }}>
+        {% form_theme form ':Form:form_errors.html.twig' %}
+
+        {{ form_errors(form) }}
+
+        {{ form_errors(form.csv) }}
+        <p>
+	        {{ form_label(form.csv) }}
+	        {{ form_widget(form.csv) }}
+	    </p>
+
+        {{ form_rest(form) }}
+
+        <p style="text-align: center;">
+        	<input type="submit" class="btn btn-primary" value="Envoyer" />
+        </p>
+    </form>
+{% endblock %}

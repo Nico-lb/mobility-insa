@@ -26,9 +26,8 @@ class WishRepository extends EntityRepository {
 		$res = $qb->getQuery()->getScalarResult();
 		$max = 0;
 		foreach ($res as $count) {
-			if ($count > $max) $max = $count;
+			if ($count[1] > $max) $max = $count[1];
 		}
-		print_r($max);
 
 		return $max;
     }

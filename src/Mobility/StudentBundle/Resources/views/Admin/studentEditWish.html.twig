@@ -1,0 +1,22 @@
+{% extends "MobilityStudentBundle:Admin:wishLayout.html.twig" %}
+
+{% block page_title %}{{ parent() }} - Modifier un voeu{% endblock %}
+
+{% block content_body %}
+	<h2>{{ student.surname|title }} {{ student.firstname|title }}</h2>
+	
+    <form method="post" class="mobility-form" {{ form_enctype(form) }}>
+	    {% form_theme form ':Form:form_errors.html.twig' %}
+
+	    {{ form_errors(form) }}
+
+	    <p>
+	        {{ form_label(form.university) }}
+	    	{{ form_errors(form.university) }}
+	        {{ form_widget(form.university) }}
+	        <input type="submit" class="btn btn-success" style="margin-left: 20px;" value="Modifier" />
+	    </p>
+
+	    {{ form_rest(form) }}
+	</form>
+{% endblock %}

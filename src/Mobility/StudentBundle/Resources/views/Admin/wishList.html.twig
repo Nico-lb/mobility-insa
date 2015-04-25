@@ -1,8 +1,13 @@
-{% extends "MobilityStudentBundle::layout.html.twig" %}
+{% extends "MobilityStudentBundle:Admin:wishLayout.html.twig" %}
 
 {% block page_title %}<a href="{{ path('main_admin') }}">Administration</a> - Gestion des voeux{% endblock %}
 
 {% block content_body %}
+<p style="text-align: right;">
+    <a href="{{ path('export_wish_list') }}" class="btn btn-primary">Exporter en CSV</a>
+    <a href="" class="btn btn-warning">Verrouiller</a>
+</p>
+
 <table class="table table-bordered table-striped table-condensed">
     <thead>
         <tr>
@@ -10,7 +15,7 @@
             <th>Prénom</th>
             <th>E-mail</th>
             <th>Promo</th>
-            <th colspan="1">Choix</th>
+            <th colspan="{{ max_choices }}">Choix</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -22,9 +27,25 @@
             <td>{{ s.firstname|title }}</td>
             <td><a href="mailto:{{ s.email }}">{{ s.email }}</a></td>
             <td>{{ s.promo }}</td>
+
+            {% if s.wishes|length > 0 %}
+                {% for w in s.wishes %}
+                    <td>{{ w.university.name }}</td>
+
+                    {% if loop.last and loop.index < max_choices %}
+                        {% for i in (loop.index+1)..max_choices %}
+                            <td></td>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% for i in 1..max_choices %}
+                    <td></td>
+                {% endfor %}
+            {% endif %}
             
             <td>
-                <a href="" title="Modifer" style="margin: 0 5px;"><span class="glyphicon glyphicon-wrench" style="color: #939090;"></span></a>
+                <a href="{{ path('admin_student_wishes', {'id':s.id}) }}" title="Modifer" style="margin: 0 5px;"><span class="glyphicon glyphicon-wrench" style="color: #939090;"></span></a>
             </td>
         </tr>
         {% endfor %}

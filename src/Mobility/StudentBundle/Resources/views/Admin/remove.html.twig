@@ -1,14 +1,14 @@
-{% extends "MobilityStudentBundle::layout.html.twig" %}
+{% extends "MobilityStudentBundle:Admin:studentLayout.html.twig" %}
 
-{% block page_title %}{{ parent() }} - Supprimer une université{% endblock %}
+{% block page_title %}{{ parent() }} - Supprimer un étudiant{% endblock %}
 
 {% block content_body %}
     <div class="text-center">
-        <p>Vous êtes sur le point de supprimer l'université "{{ university.name }}".</p>
+        <p>Vous êtes sur le point de supprimer l'étudiant "{{ student.surname|title }} {{ student.firstname|title }}".</p>
         
         <p>
-            <a href="{{ path('university_remove_confirm', {'id': university.id, 'token': csrf_token('remove_university')}) }}" class="btn btn-danger">Confirmer</a>
-            <a href="{{ path('university_list') }}" class="btn btn-default">Annuler</a>
+            <a href="{{ path('student_remove_confirm', {'id': student.id, 'token': csrf_token('remove_student')}) }}" class="btn btn-danger">Confirmer</a>
+            <a href="{{ path('student_list') }}" class="btn btn-default">Annuler</a>
         </p>
     </div>
 {% endblock %}

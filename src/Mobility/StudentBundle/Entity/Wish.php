@@ -26,7 +26,7 @@ class Wish
      * @ORM\ManyToOne(targetEntity="Mobility\UniversityBundle\Entity\University")
      * @Assert\Valid()
      */
-    private $University;
+    private $university;
 
     /**
      * @var integer
@@ -89,7 +89,7 @@ class Wish
      */
     public function setUniversity(\Mobility\UniversityBundle\Entity\University $university)
     {
-        $this->University = $university;
+        $this->university = $university;
 
         return $this;
     }
@@ -101,6 +101,6 @@ class Wish
      */
     public function getUniversity()
     {
-        return $this->University;
+        return $this->university;
     }
 }

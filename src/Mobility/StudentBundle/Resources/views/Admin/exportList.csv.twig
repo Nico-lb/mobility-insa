@@ -1,0 +1,6 @@
+Nom;Prénom;E-mail;Promo{% for i in 1..max_choices %};Choix {{ i }}{% endfor %}
+
+{% for s in students %}
+{{ s.surname|title }};{{ s.firstname|title }};{{ s.email }};{{ s.promo }}{% if s.wishes|length > 0 %}{% for w in s.wishes %};{{ w.university.name }}{% if loop.last and loop.index < max_choices %}{% for i in (loop.index+1)..max_choices %};{% endfor %}{% endif %}{% endfor %}{% else %}{% for i in 1..max_choices %};{% endfor %}{% endif %}
+
+{% endfor %}

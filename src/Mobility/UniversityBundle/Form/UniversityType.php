@@ -39,6 +39,6 @@ class UniversityType extends AbstractType
      */
     public function getName()
     {
-        return 'mobility_universitybundle_event';
+        return 'mobility_universitybundle_university';
     }
 }
