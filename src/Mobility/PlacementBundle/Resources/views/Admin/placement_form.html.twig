@@ -1,0 +1,36 @@
+<form method="post" class="mobility-form" {{ form_enctype(form) }}>
+    {% form_theme form ':Form:form_errors.html.twig' %}
+
+    {{ form_errors(form) }}
+
+    {{ form_errors(form.student) }}
+    <p>
+        {{ form_label(form.student) }}
+        {{ form_widget(form.student) }}
+    </p>
+
+    {{ form_errors(form.university) }}
+    <p>
+        {{ form_label(form.university) }}
+        {{ form_widget(form.university) }}
+    </p>
+
+    {{ form_errors(form.state) }}
+    <p>
+        {{ form_label(form.state) }}
+        {{ form_widget(form.state) }}
+    </p>
+
+    {{ form_errors(form.year) }}
+    <p>
+        {{ form_label(form.year) }}
+        {{ form_widget(form.year) }}
+    </p>
+
+    {{ form_rest(form) }}
+
+    <p>
+        <input type="submit" class="btn btn-primary push" value="Envoyer" />
+    </p>
+</form>
+    

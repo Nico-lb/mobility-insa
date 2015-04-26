@@ -1,3 +1,8 @@
+mobility_placement:
+    resource: "@MobilityPlacementBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 mobility_student:
     resource: "@MobilityStudentBundle/Controller/"
     type:     annotation

@@ -1,0 +1,14 @@
+{% extends "MobilityPlacementBundle:Admin:layout.html.twig" %}
+
+{% block page_title %}{{ parent() }} - Supprimer une affectation{% endblock %}
+
+{% block content_body %}
+    <div class="text-center">
+        <p>Vous êtes sur le point de supprimer l'affectation de "{{ placement.student.surname|title }} {{ placement.student.firstname|title }}" à l'université "{{ placement.university.name }}".</p>
+        
+        <p>
+            <a href="{{ path('placement_remove_confirm', {'student': placement.student.id, 'university': placement.university.id, 'token': csrf_token('remove_placement')}) }}" class="btn btn-danger">Confirmer</a>
+            <a href="{{ path('placement_list_year', {'year': placement.year}) }}" class="btn btn-default">Annuler</a>
+        </p>
+    </div>
+{% endblock %}

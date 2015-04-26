@@ -1,0 +1,11 @@
+- Etudiant
+- Université
+- Etat : { 0 = Temporaire ; 1 = Fixée ; 2 = Validée }
+- Année : (période janvier - juin)
+
+Avant d'effectuer le calcul automatique de la répartition des étudiants, il est possible de "fixer" des affectations (ces dernières deviennent prioritaires par rapport au classement).
+Le calcul automatique supprime toutes les affectations "temporaires", puis génére une nouvelle liste des affectations "temporaires" en fonction des affectations "fixées", du classement et des places dans les universités.
+
+L'administrateur peut à tout moment rendre public ou non la liste des affectations temporaires.
+
+Lorsque les affectations ne sont plus sujettes à changement, l'administrateur les passe toutes en "validées".

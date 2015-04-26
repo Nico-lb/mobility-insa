@@ -144,6 +144,16 @@ class Student
     }
 
     /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->surname . ' ' . $this->firstname;
+    }
+
+    /**
      * Set email
      *
      * @param string $email

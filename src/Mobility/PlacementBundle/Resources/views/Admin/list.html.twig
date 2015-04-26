@@ -1,0 +1,48 @@
+{% extends "MobilityPlacementBundle:Admin:layout.html.twig" %}
+
+{% block page_title %}<a href="{{ path('main_admin') }}">Administration</a> - Gestion des affectations{% endblock %}
+
+{% block content_body %}
+<p style="text-align: right;">
+    <a href="{{ path('placement_add', {'year': year}) }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+</p>
+
+<ul class="nav nav-tabs" role="tablist">
+	{% for y in years %}
+    <li {% if y == year %}class="active"{% endif %}><a href="{{ path('placement_list_year', {'year': y}) }}">{{ y }}</a></li>
+	{% endfor %}
+</ul>
+
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Promo</th>
+            <th>Université</th>
+            <th>État</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        {% for p in placements %}
+        <tr>
+            <td>{{ p.student.surname|title }}</td>
+            <td>{{ p.student.firstname|title }}</td>
+            <td>{{ p.student.promo }}</td>
+            <td>{{ p.university.name }}</td>
+            <td>
+                {% if p.state == 0 %}Temporaire
+                {% elseif p.state == 1 %}<strong>Fixée</strong>
+                {% elseif p.state == 2 %}<strong><em>Validée</em></strong>{% endif %}
+            </td>
+            <td>
+                <a href="{{ path('placement_edit', {'student': p.student.id, 'university': p.university.id}) }}" title="Modifer" style="margin: 0 5px;"><span class="glyphicon glyphicon-wrench" style="color: #939090;"></span></a>
+                <a href="{{ path('placement_remove', {'student': p.student.id, 'university': p.university.id}) }}" title="Supprimer" style="margin: 0 5px;"><span class="glyphicon glyphicon-remove" style="color: #CE0404;"></span></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

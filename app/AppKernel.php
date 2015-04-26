@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Mobility\UserBundle\MobilityUserBundle(),
             new Mobility\UniversityBundle\MobilityUniversityBundle(),
             new Mobility\StudentBundle\MobilityStudentBundle(),
+            new Mobility\PlacementBundle\MobilityPlacementBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
