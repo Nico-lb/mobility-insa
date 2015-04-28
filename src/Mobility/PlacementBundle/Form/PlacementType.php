@@ -37,6 +37,7 @@ class PlacementType extends AbstractType
                 'multiple'  => false,
                 'expanded'  => false))
             ->add('year', 'integer', array('label' => 'Année'))
+            ->add('comment', 'text', array('label' => 'Commentaire'))
         ;
     }
     

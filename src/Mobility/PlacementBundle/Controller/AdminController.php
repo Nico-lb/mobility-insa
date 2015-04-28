@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Mobility\PlacementBundle\Entity\Placement;
 use Mobility\PlacementBundle\Form\PlacementType;
 use Mobility\MainBundle\Entity\Year;
+use Mobility\StudentBundle\Entity\Student;
 
 /**
  * @Route("/admin/placements")
@@ -226,6 +227,13 @@ class AdminController extends Controller
         }
         
         $em = $this->getDoctrine()->getManager();
+
+        $repo_students = $em->getRepository('MobilityStudentBundle:Student');
+        $students = $repo_students->getStudents($year->getYear());
+        foreach ($students as $s) {
+            $this->sendPlacementsPublicMail($s);
+        }
+
         $year->setPlacementsPublic(true);
         $em->flush();
         $this->get('session')->getFlashBag()->add('success', 'Les étudiants ont été informés.');
@@ -283,11 +291,20 @@ class AdminController extends Controller
             $p->setState(2);
         }
         $year->setPlacementsLocked(true);
-        // TODO : send mail
+        // TODO : mail
 
         $em->flush();
         $this->get('session')->getFlashBag()->add('success', 'Affectations validées et verrouillées !');
         
         return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year->getYear())));
+    }
+    
+    private function sendPlacementsPublicMail(Student $student) {
+        $message = \Swift_Message::newInstance()
+                ->setSubject('Mobilité à l\'étranger : Les affectations ont été mises à jour')
+                ->setFrom($this->container->getParameter('admin_email'))
+                ->setTo($student->getEmail())
+                ->setBody($this->renderView('MobilityPlacementBundle:Admin:placementsPublic.html.twig', array('student' => $student)), 'text/html');
+        $this->get('mailer')->send($message);
     }
 }

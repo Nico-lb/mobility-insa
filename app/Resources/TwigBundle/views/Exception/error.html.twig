@@ -1,0 +1,9 @@
+{% extends "::base.html.twig" %}
+
+{% block page_title %}Erreur {{ status_code }}{% endblock %}
+
+{% block content %}
+<div class="well">
+    Woops ! Une erreur est survenue, le serveur a renvoyé : "{{ status_code }} {{ status_text }}".<br />
+</div>
+{% endblock %}

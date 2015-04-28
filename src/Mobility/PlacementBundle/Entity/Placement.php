@@ -47,6 +47,15 @@ class Placement
      */
     private $state;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="string")
+     */
+    private $comment;
+
+
+
 
     public function __construct() {
         $now = new \DateTime();
@@ -148,5 +157,28 @@ class Placement
     public function getYear()
     {
         return $this->year;
+    }
+
+    /**
+     * Set comment
+     *
+     * @param string $comment
+     * @return Placement
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Get comment
+     *
+     * @return string 
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

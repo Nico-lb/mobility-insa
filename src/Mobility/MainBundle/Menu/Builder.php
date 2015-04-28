@@ -13,7 +13,6 @@ class Builder extends ContainerAware
         $menu->setChildrenAttribute('class', 'nav navbar-nav');
         
         $menu->addChild('Accueil', array('route' => 'main_index'));
-        $menu->addChild('Demo', array('route' => 'main_demo'));
 
         return $menu;
     }

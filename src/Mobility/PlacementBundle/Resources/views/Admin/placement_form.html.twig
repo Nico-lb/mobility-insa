@@ -27,6 +27,12 @@
         {{ form_widget(form.year) }}
     </p>
 
+    {{ form_errors(form.comment) }}
+    <p>
+        {{ form_label(form.comment) }}
+        {{ form_widget(form.comment) }}
+    </p>
+
     {{ form_rest(form) }}
 
     <p>

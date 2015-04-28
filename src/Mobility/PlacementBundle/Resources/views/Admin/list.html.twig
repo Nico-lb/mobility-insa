@@ -30,6 +30,7 @@
             <th>Rang</th>
             <th>Université</th>
             <th>État</th>
+            <th>Commentaire</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -47,6 +48,7 @@
                 {% elseif p.state == 1 %}<strong>Fixée</strong>
                 {% elseif p.state == 2 %}<strong><em>Validée</em></strong>{% endif %}
             </td>
+            <td>{{ p.comment }}</td>
             <td>
                 <a href="{{ path('placement_edit', {'student': p.student.id, 'university': p.university.id}) }}" title="Modifer" style="margin: 0 5px;"><span class="glyphicon glyphicon-wrench" style="color: #939090;"></span></a>
                 <a href="{{ path('placement_remove', {'student': p.student.id, 'university': p.university.id}) }}" title="Supprimer" style="margin: 0 5px;"><span class="glyphicon glyphicon-remove" style="color: #CE0404;"></span></a>

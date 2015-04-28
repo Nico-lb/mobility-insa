@@ -1,0 +1,29 @@
+{% extends "MobilityPlacementBundle::layout.html.twig" %}
+
+{% block page_title %}Affectations{% endblock %}
+
+{% block content_body %}
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Promo</th>
+            <th>Université</th>
+            <th>Commentaire</th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        {% for p in placements %}
+        <tr>
+            <td>{{ p.student.surname|title }}</td>
+            <td>{{ p.student.firstname|title }}</td>
+            <td>{{ p.student.promo }}</td>
+            <td>{{ p.university.name }}</td>
+            <td>{{ p.comment }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
