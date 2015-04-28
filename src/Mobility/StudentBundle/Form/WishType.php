@@ -8,19 +8,35 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class WishType extends AbstractType
 {
+    public function __construct($options = null) {
+        $this->options = $options;
+        if ($this->options == null) {
+            $this->options['activeOnly'] = false;
+        }
+    }
+
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $opts = $this->options;
         $builder
             ->add('university', 'entity', array(
-                'label'     => 'Université',
-                'class'     => 'MobilityUniversityBundle:University',
-                'property'  => 'name',
-                'multiple'  => false,
-                'expanded'  => false))
+                'label'         => 'Université',
+                'class'         => 'MobilityUniversityBundle:University',
+                'property'      => 'name',
+                'query_builder' => function($repo) use (&$opts) {
+                    if ($opts['activeOnly']) return $repo->createQueryBuilder('u')
+                                                        ->where('u.partnershipState = :active')
+                                                        ->setParameter('active', true)
+                                                        ->orderBy('u.name', 'asc');
+                    else return $repo->createQueryBuilder('u')
+                                    ->orderBy('u.name', 'asc');
+                },
+                'multiple'      => false,
+                'expanded'      => false))
         ;
     }
     

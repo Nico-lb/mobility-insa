@@ -1,0 +1,17 @@
+{% extends "MobilityPlacementBundle:Admin:layout.html.twig" %}
+
+{% block page_title %}{{ parent() }} - Rendre publiques{% endblock %}
+
+{% block content_body %}
+    <div class="text-center">
+        <p>
+        	Vous êtes sur le point de rendre les affectations de l'année {{ year }} publiques. <br />
+        	Les étudiants en seront automatiquement informés par mail.
+        </p>
+        
+        <p>
+            <a href="{{ path('placements_setpublic_confirm', {'year': year, 'token': csrf_token('setpublic_placements')}) }}" class="btn btn-danger">Confirmer</a>
+            <a href="{{ path('placement_list_year', {'year': year}) }}" class="btn btn-default">Annuler</a>
+        </p>
+    </div>
+{% endblock %}

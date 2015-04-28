@@ -4,6 +4,12 @@
 
 {% block content %}
 <div class="well">
-	
+    {% if startYear %}
+	<p style="text-align: right;">
+		<a href="{{ path('start_year') }}" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Nouvelle année</a>
+	</p>
+	{% else %}
+    	{{ render(controller('MobilityMainBundle:Admin:manageYear', {'year': years[0].year})) }}
+	{% endif %}
 </div>
 {% endblock %}

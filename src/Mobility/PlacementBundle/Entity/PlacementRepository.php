@@ -23,6 +23,7 @@ class PlacementRepository extends EntityRepository
 		return $qb->getQuery()->getResult();
 	}
 
+	/*
 	public function getYears() {
 		$qb = $this->createQueryBuilder('p')
 			->select('p.year')
@@ -36,5 +37,5 @@ class PlacementRepository extends EntityRepository
 		}
 
 		return $r;
-	}
+	}*/
 }

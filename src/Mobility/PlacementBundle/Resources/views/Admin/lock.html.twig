@@ -1,0 +1,18 @@
+{% extends "MobilityPlacementBundle:Admin:layout.html.twig" %}
+
+{% block page_title %}{{ parent() }} - Valider et Verrouiller{% endblock %}
+
+{% block content_body %}
+    <div class="text-center">
+        <p>
+        	Vous êtes sur le point de valider et de verrouiller les affectations de l'année {{ year }}. <br />
+        	<strong>Attention ! Cette action est irréversible.</strong><br />
+            Les étudiants en seront automatiquement informés par mail.
+        </p>
+        
+        <p>
+            <a href="{{ path('placements_lock_confirm', {'year': year, 'token': csrf_token('lock_placements')}) }}" class="btn btn-danger">Confirmer</a>
+            <a href="{{ path('placement_list_year', {'year': year}) }}" class="btn btn-default">Annuler</a>
+        </p>
+    </div>
+{% endblock %}

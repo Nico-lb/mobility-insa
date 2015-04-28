@@ -16,21 +16,28 @@ use Mobility\StudentBundle\Form\WishType;
 class AdminController extends Controller
 {
     /**
-     * @Route("/", name="student_list")
+     * @Route("/", defaults={"year" = 0}, name="student_list")
+     * @Route("/list-{year}", requirements={"year" = "\d+"}, name="student_list_year")
      * @Template()
      */
-    public function listAction() {
+    public function listAction($year) {
+        $repo_years = $this->getDoctrine()->getManager()->getRepository('MobilityMainBundle:Year');
+        $years = $repo_years->getYears();
+        if (count($years) == 0) return $this->redirect($this->generateUrl('overview'));
+
+        if ($year == 0) $year = $years[0];
+
         $repo = $this->getDoctrine()->getManager()->getRepository('MobilityStudentBundle:Student');
-        $students = $repo->findAll();
+        $students = $repo->getStudents($year);
         
-        return array('students' => $students);
+        return array('year' => $year, 'years' => $years, 'students' => $students);
     }
 
     /**
-     * @Route("/add-list", name="student_addlist")
+     * @Route("/add-list-{year}", requirements={"year" = "\d+"}, name="student_addlist")
      * @Template()
      */
-    public function addStudentListAction() {
+    public function addStudentListAction($year) {
         $form = $this->createFormBuilder()->add('csv', 'textarea', array(
             'label' => 'CSV',
             'attr' => array('cols' => '75', 'rows' => '7')
@@ -51,23 +58,25 @@ class AdminController extends Controller
                     $student->setFirstname($line_data[1]);
                     $student->setEmail($line_data[2]);
                     $student->setPromo((int)$line_data[3]);
+                    $student->setYear($year);
                     $em->persist($student);
                 }
             }
 
             $em->flush();
-            return $this->redirect($this->generateUrl('student_list'));
+            return $this->redirect($this->generateUrl('student_list_year', array('year' => $year)));
         }
         
         return array('form' => $form->createView());
     }
 
     /**
-     * @Route("/add", name="student_add")
+     * @Route("/add-{year}", requirements={"year" = "\d+"}, name="student_add")
      * @Template()
      */
-    public function addAction() {
+    public function addAction($year) {
         $student = new Student();
+        $student->setYear($year);
         $form = $this->createForm(new StudentType(), $student);
         
         $request = $this->get('request');
@@ -79,7 +88,7 @@ class AdminController extends Controller
                 $em->persist($student);
                 $em->flush();
                 
-                return $this->redirect($this->generateUrl('student_list'));
+                return $this->redirect($this->generateUrl('student_list_year', array('year' => $student->getYear())));
             }
         }
         
@@ -101,7 +110,7 @@ class AdminController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
                 
-                return $this->redirect($this->generateUrl('student_list'));
+                return $this->redirect($this->generateUrl('student_list_year', array('year' => $student->getYear())));
             }
         }
         
@@ -135,10 +144,10 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/edit-ranking", name="student_edit_ranking")
+     * @Route("/edit-ranking-{year}", requirements={"year" = "\d+"}, name="student_edit_ranking")
      * @Template()
      */
-    public function editRankingAction() {
+    public function editRankingAction($year) {
         $form = $this->createFormBuilder()->add('csv', 'textarea', array(
             'label' => 'CSV',
             'attr' => array('cols' => '75', 'rows' => '7')
@@ -150,7 +159,7 @@ class AdminController extends Controller
             $em = $this->getDoctrine()->getManager();
             $repo = $em->getRepository('MobilityStudentBundle:Student');
 
-            $students = $repo->findAll();
+            $students = $repo->getStudents($year);
             
             $csv = $form->get('csv')->getData();
             $lines = split("\n", $csv);
@@ -172,40 +181,82 @@ class AdminController extends Controller
             }
 
             $em->flush();
-            return $this->redirect($this->generateUrl('student_list'));
+            return $this->redirect($this->generateUrl('student_list_year', array('year' => $year)));
         }
         
         return array('form' => $form->createView());
     }
 
     /**
-     * @Route("/wish-list", name="wish_list")
+     * @Route("/wish-list", defaults={"year" = 0}, name="wish_list")
+     * @Route("/wish-list-{year}", requirements={"year" = "\d+"}, name="wish_list_year")
      * @Template()
      */
-    public function wishListAction() {
+    public function wishListAction($year) {
+        $repo_years = $this->getDoctrine()->getManager()->getRepository('MobilityMainBundle:Year');
+        $years = $repo_years->getYears();
+        if (count($years) == 0) return $this->redirect($this->generateUrl('overview'));
+
+        if ($year == 0) $year = $years[0];
+
         $repo_wishes = $this->getDoctrine()->getManager()->getRepository('MobilityStudentBundle:Wish');
-        $max_choices = $repo_wishes->maxChoices();
+        $max_choices = max(1, $repo_wishes->maxChoices($year));
 
         $repo_students = $this->getDoctrine()->getManager()->getRepository('MobilityStudentBundle:Student');
-        $students = $repo_students->findAll();
+        $students = $repo_students->getStudents($year);
+
+        $lock_button = $repo_students->countByState($year, 0) > 0;
+        $unlock_button = $repo_students->countByNotState($year, 1) == 0;
         
-        return array('max_choices' => $max_choices, 'students' => $students);
+        return array('year' => $year, 'years' => $years, 'max_choices' => $max_choices, 'students' => $students, 'lock_button' => $lock_button, 'unlock_button' => $unlock_button);
     }
 
     /**
-     * @Route("/wishlist.csv", name="export_wish_list")
+     * @Route("/wishlist-{year}.csv", requirements={"year" = "\d+"}, name="export_wish_list")
      */
-    public function exportListAction() {
+    public function exportListAction($year) {
         $repo_wishes = $this->getDoctrine()->getManager()->getRepository('MobilityStudentBundle:Wish');
-        $max_choices = $repo_wishes->maxChoices();
+        $max_choices = max(1, $repo_wishes->maxChoices($year));
 
         $repo_students = $this->getDoctrine()->getManager()->getRepository('MobilityStudentBundle:Student');
-        $students = $repo_students->findAll();
+        $students = $repo_students->getStudents($year);
         
         $response = $this->render('MobilityStudentBundle:Admin:exportList.csv.twig', array('max_choices' => $max_choices, 'students' => $students));
         $response->headers->set('Content-Type', 'text/csv');
-        $response->headers->set('Content-Disposition', ' attachment;filename=wishlist.csv');
+        $response->headers->set('Content-Disposition', ' attachment;filename=wishlist-'.$year.'.csv');
         return $response;
+    }
+
+    /**
+     * @Route("/lock-wishes-{year}", requirements={"year" = "\d+"}, name="lock_wishes")
+     */
+    public function lockAction($year) {
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('MobilityStudentBundle:Student');
+        $students = $repo->findBy(array('year' => $year, 'state' => 0));
+
+        foreach ($students as $s) {
+            $s->setState(1);
+        }
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('wish_list_year', array('year' => $year)));
+    }
+
+    /**
+     * @Route("/unlock-wishes-{year}", requirements={"year" = "\d+"}, name="unlock_wishes")
+     */
+    public function unlockAction($year) {
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository('MobilityStudentBundle:Student');
+        $students = $repo->findBy(array('year' => $year, 'state' => 1));
+
+        foreach ($students as $s) {
+            $s->setState(0);
+        }
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('wish_list_year', array('year' => $year)));
     }
 
     /**

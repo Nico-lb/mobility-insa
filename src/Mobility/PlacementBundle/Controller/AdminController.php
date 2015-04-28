@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Mobility\PlacementBundle\Entity\Placement;
 use Mobility\PlacementBundle\Form\PlacementType;
+use Mobility\MainBundle\Entity\Year;
 
 /**
  * @Route("/admin/placements")
@@ -19,24 +20,117 @@ class AdminController extends Controller
      * @Template()
      */
     public function listAction($year) {
-    	if ($year == 0) {
-	    	$now = new \DateTime();
-	    	// Si mois >= sept, on prend l'année suivante
-	    	if ($now->format('n') >= 9) {
-	    		$year = $now->format('Y') + 1;
-	    	} else {
-	    		$year = $now->format('Y');
-	    	}
-    	}
+        $repo_years = $this->getDoctrine()->getManager()->getRepository('MobilityMainBundle:Year');
+        $years = $repo_years->getYears();
+        if (count($years) == 0) return $this->redirect($this->generateUrl('overview'));
+
+        if ($year == 0) $year = $years[0];
 
     	$repo = $this->getDoctrine()->getManager()->getRepository('MobilityPlacementBundle:Placement');
     	$placements = $repo->getPlacements($year);
-    	$years = $repo->getYears();
-    	if (count($years) == 0) {
-    		$years[] = $year;
-    	}
 
-        return array('year' => $year, 'years' => $years, 'placements' => $placements);
+        $y = $repo_years->findOneBy(array('year' => $year));
+        $public = $y->getPlacementsPublic();
+        $unlocked = !$y->getPlacementsLocked();
+
+        return array('year' => $year, 'years' => $years, 'public' => $public, 'placements' => $placements, 'unlocked' => $unlocked);
+    }
+    
+    /**
+     * @Route("/auto-{year}", requirements={"year" = "\d+"}, name="placements_auto")
+     */
+    public function autoAction($year) {
+        $em = $this->getDoctrine()->getManager();
+        $repo_placements = $em->getRepository('MobilityPlacementBundle:Placement');
+        $repo_students = $em->getRepository('MobilityStudentBundle:Student');
+        $repo_universities = $em->getRepository('MobilityUniversityBundle:University');
+
+        if ($repo_students->countByState($year, 0) > 0) {
+            $this->get('session')->getFlashBag()->add('error', 'Erreur : certains étudiants peuvent encore changer leurs voeux.');
+            return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year)));
+        } else if ($repo_students->countByNotState($year, 1) > 0) {
+            $this->get('session')->getFlashBag()->add('error', 'Erreur : certains étudiants ont un état incohérent.');
+            return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year)));
+        }
+
+        $placements = $repo_placements->getPlacements($year);
+
+        // On supprime les affectations temporaires
+        foreach ($placements as $p) {
+            if ($p->getState() == 0) {
+                $em->remove($p);
+            }
+        }
+        $em->flush();
+
+        // Liste des affectations fixées
+        $placements = $repo_placements->getPlacements($year);
+
+        // Liste des universités
+        // cf questions : $universities = $repo_universities->findBy(array('partnershipState' => true));
+        $universities = $repo_universities->findAll();
+
+        // Tableau des étudiants déjà affectés dans une université
+        $students_placed = array();
+        // Tableau contenant le nombre d'étudiants affectés dans chaque université
+        $students_count = array();
+
+        foreach ($universities as $u) {
+            $students_count[$u->getId()] = 0;
+        }
+        foreach ($placements as $p) {
+            $students_placed[] = $p->getStudent()->getId();
+            $students_count[$p->getUniversity()->getId()]++;
+        }
+
+        // On récupère la liste des étudiants concernés, triés par leur classement
+        $students_4a = $repo_students->getRankedStudents($year, 4);
+        $students_3a = $repo_students->getRankedStudents($year, 3);
+
+        $j = 0; $k = 0;
+        for ($i=0; $i < count($students_4a) + count($students_3a); $i++) {
+            $s = null;
+
+            if ($j >= count($students_4a)) {
+                $s = $students_3a[$k];
+            } else if ($k >= count($students_3a)) {
+                $s = $students_4a[$j];
+            } else {
+                $s4a = $students_4a[$j];
+                $s3a = $students_3a[$k];
+
+                // Les étudiants de 4eme année sont prioritaires sur les étudiants de 3eme année ayant un rang supérieur ou égal
+                if ($s4a->getRank() <= $s3a->getRank()) {
+                    $s = $s4a;
+                    $j++;
+                } else {
+                    $s = $s3a;
+                    $k++;
+                }
+            }
+
+            if (!in_array($s->getId(), $students_placed)) {
+                // On parcourt les voeux de l'étudiant du plus prioritaire au moins prioritaire
+                foreach ($s->getWishes() as $w) {
+                    $u = $w->getUniversity();
+                    // S'il reste une place dans l'université en question, on ajoute l'affectation et on passe à l'étudiant suivant.
+                    // sinon on continue à parcourir les voeux
+                    if ($u->getPlaces() == -1 || $students_count[$u->getId()] < $u->getPlaces()) {
+                        $students_count[$u->getId()]++;
+                        $placement = new Placement();
+                        $placement->setStudent($s);
+                        $placement->setUniversity($u);
+                        $placement->setYear($year);
+                        $placement->setState(0);
+                        $em->persist($placement);
+                        break;
+                    }
+                }
+            }
+        }
+        $em->flush();
+        
+        return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year)));
     }
     
     /**
@@ -111,5 +205,89 @@ class AdminController extends Controller
         $this->get('session')->getFlashBag()->add('success', 'Affectation supprimée');
         
         return $this->redirect($this->generateUrl('placement_list_year', array('year' => $placement->getYear())));
+    }
+    
+    /**
+     * @Route("/set-public-{year}", requirements={"year" = "\d+"}, name="placements_setpublic")
+     * @Template()
+     */
+    public function setPublicAction(Year $year) {
+        return array('year' => $year->getYear());
+    }
+    
+    /**
+     * @Route("/set-public-{year}-confirm/{token}", requirements={"year" = "\d+"}, name="placements_setpublic_confirm")
+     */
+    public function setPublicConfirmAction(Year $year, $token) {
+        $csrf = $this->get('form.csrf_provider');
+        if (!$csrf->isCsrfTokenValid('setpublic_placements', $token)) {
+            $this->get('session')->getFlashBag()->add('error', 'Token invalide !');
+            return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year->getYear())));
+        }
+        
+        $em = $this->getDoctrine()->getManager();
+        $year->setPlacementsPublic(true);
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('success', 'Les étudiants ont été informés.');
+        
+        return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year->getYear())));
+    }
+    
+    /**
+     * @Route("/set-private-{year}", requirements={"year" = "\d+"}, name="placements_setprivate")
+     * @Template()
+     */
+    public function setPrivateAction(Year $year) {
+        return array('year' => $year->getYear());
+    }
+    
+    /**
+     * @Route("/set-private-{year}-confirm/{token}", requirements={"year" = "\d+"}, name="placements_setprivate_confirm")
+     */
+    public function setPrivateConfirmAction(Year $year, $token) {
+        $csrf = $this->get('form.csrf_provider');
+        if (!$csrf->isCsrfTokenValid('setprivate_placements', $token)) {
+            $this->get('session')->getFlashBag()->add('error', 'Token invalide !');
+            return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year->getYear())));
+        }
+        
+        $em = $this->getDoctrine()->getManager();
+        $year->setPlacementsPublic(false);
+        $em->flush();
+        
+        return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year->getYear())));
+    }
+    
+    /**
+     * @Route("/lock-{year}", requirements={"year" = "\d+"}, name="placements_lock")
+     * @Template()
+     */
+    public function lockAction(Year $year) {
+        return array('year' => $year->getYear());
+    }
+    
+    /**
+     * @Route("/lock-{year}-confirm/{token}", requirements={"year" = "\d+"}, name="placements_lock_confirm")
+     */
+    public function lockConfirmAction(Year $year, $token) {
+        $csrf = $this->get('form.csrf_provider');
+        if (!$csrf->isCsrfTokenValid('lock_placements', $token)) {
+            $this->get('session')->getFlashBag()->add('error', 'Token invalide !');
+            return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year->getYear())));
+        }
+        
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getDoctrine()->getManager()->getRepository('MobilityPlacementBundle:Placement');
+        $placements = $repo->getPlacements($year);
+        foreach ($placements as $p) {
+            $p->setState(2);
+        }
+        $year->setPlacementsLocked(true);
+        // TODO : send mail
+
+        $em->flush();
+        $this->get('session')->getFlashBag()->add('success', 'Affectations validées et verrouillées !');
+        
+        return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year->getYear())));
     }
 }

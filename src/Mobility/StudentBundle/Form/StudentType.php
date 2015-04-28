@@ -20,7 +20,17 @@ class StudentType extends AbstractType
             ->add('email', 'text', array('label' => 'E-mail'))
             ->add('promo', 'integer', array('label' => 'Promo'))
             ->add('rank', 'integer', array('label' => 'Rang'))
-            ->add('state', 'integer', array('label' => 'Statut'))
+            ->add('state', 'choice', array(
+                'label' => 'État',
+                'choices' => array(
+                    -1 =>    'Pas d\'affectation',
+                    0 =>    'Choix des voeux',
+                    1 =>    'Voeux verrouillés',
+                    2 =>    'Attente du contrat',
+                    3 =>    'Contrat validé',
+                    4 =>    'À l\'étranger',
+                )))
+            ->add('year', 'integer', array('label' => 'Année'))
         ;
     }
     

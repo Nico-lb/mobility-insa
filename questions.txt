@@ -1,0 +1,9 @@
+Affectations automatique :
+	Auncun étudiant ne peut accéder à l'état 2 (début des démarches) tant que la liste des affectations n'est pas verrouillée. C'est ok ?
+
+	Est-ce qu'on traite uniquement les universités dont le partenariat est actif.
+	Intérêt de ne pas le faire : les étudiants ne peuvent pas sélectionner une université inactive mais les administrateurs si.
+								Ca permet de placer des étudiants dans une université sans laissé cette possibilité aux autres étudiants (pour un cas particulier).
+
+Insertion signature via logiciel ?
+	http://forums.cnetfrance.fr/topic/172752-insertion-signature-dans-pdf-resolu/

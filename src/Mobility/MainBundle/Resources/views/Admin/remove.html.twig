@@ -1,0 +1,14 @@
+{% extends "MobilityUniversityBundle::layout.html.twig" %}
+
+{% block page_title %}<a href="{{ path('main_admin') }}">Administration</a> - <a href="{{ path('overview') }}">Tableau de bord</a> - Supprimer l'année {{ year.year }}{% endblock %}
+
+{% block content_body %}
+    <div class="text-center">
+        <p>Vous êtes sur le point de supprimer l'année "{{ year.year }}".</p>
+        
+        <p>
+            <a href="{{ path('remove_year_confirm', {'year': year.year, 'token': csrf_token('remove_year')}) }}" class="btn btn-danger">Confirmer</a>
+            <a href="{{ path('overview') }}" class="btn btn-default">Annuler</a>
+        </p>
+    </div>
+{% endblock %}

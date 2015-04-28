@@ -33,18 +33,19 @@ class Placement
     private $university;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="state", type="integer")
-     */
-    private $state;
-
-    /**
+     * @ORM\Id
      * @var integer
      *
      * @ORM\Column(name="year", type="integer")
      */
     private $year;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="state", type="integer")
+     */
+    private $state;
 
 
     public function __construct() {

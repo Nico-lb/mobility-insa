@@ -4,9 +4,16 @@
 
 {% block content_body %}
 <p style="text-align: right;">
-    <a href="{{ path('export_wish_list') }}" class="btn btn-primary">Exporter en CSV</a>
-    <a href="" class="btn btn-warning">Verrouiller</a>
+    <a href="{{ path('export_wish_list', {'year': year}) }}" class="btn btn-primary">Exporter en CSV</a>
+    {% if lock_button %}<a href="{{ path('lock_wishes', {'year': year}) }}" class="btn btn-warning">Verrouiller</a>{% endif %}
+    {% if unlock_button %}<a href="{{ path('unlock_wishes', {'year': year}) }}" class="btn btn-warning">Déverrouiller</a>{% endif %}
 </p>
+
+<ul class="nav nav-tabs" role="tablist">
+    {% for y in years %}
+    <li {% if y == year %}class="active"{% endif %}><a href="{{ path('wish_list_year', {'year': y}) }}">{{ y }}</a></li>
+    {% endfor %}
+</ul>
 
 <table class="table table-bordered table-striped table-condensed">
     <thead>

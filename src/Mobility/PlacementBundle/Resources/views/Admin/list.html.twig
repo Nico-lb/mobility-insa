@@ -4,7 +4,15 @@
 
 {% block content_body %}
 <p style="text-align: right;">
-    <a href="{{ path('placement_add', {'year': year}) }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+    {% if unlocked %}
+        <a href="{{ path('placements_auto', {'year': year}) }}" class="btn btn-primary">Répartition automatique</a>
+    {% endif %}
+    <a href="{{ path('placement_add', {'year': year}) }}" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+    {% if public %}
+        <a href="{{ path('placements_setprivate', {'year': year}) }}" class="btn btn-warning">Rendre privées</a>
+    {% else %}
+        <a href="{{ path('placements_setpublic', {'year': year}) }}" class="btn btn-warning">Rendre publiques</a>
+    {% endif %}
 </p>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -19,6 +27,7 @@
             <th>Nom</th>
             <th>Prénom</th>
             <th>Promo</th>
+            <th>Rang</th>
             <th>Université</th>
             <th>État</th>
             <th>Actions</th>
@@ -31,6 +40,7 @@
             <td>{{ p.student.surname|title }}</td>
             <td>{{ p.student.firstname|title }}</td>
             <td>{{ p.student.promo }}</td>
+            <td>{{ p.student.rank }}</td>
             <td>{{ p.university.name }}</td>
             <td>
                 {% if p.state == 0 %}Temporaire
@@ -45,4 +55,10 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% if unlocked %}
+<p style="text-align: right;">
+    <a href="{{ path('placements_lock', {'year': year}) }}" class="btn btn-success">Valider et Verrouiller</a>
+</p>
+{% endif %}
 {% endblock %}

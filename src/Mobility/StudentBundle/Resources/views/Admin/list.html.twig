@@ -4,10 +4,16 @@
 
 {% block content_body %}
 <p style="text-align: right;">
-    <a href="{{ path('student_add') }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter</a>
-    <a href="{{ path('student_addlist') }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un lot</a>
-    <a href="{{ path('student_edit_ranking') }}" class="btn btn-success"><span class="glyphicon glyphicon-wrench"></span> Classement</a>
+    <a href="{{ path('student_add', {'year': year}) }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter</a>
+    <a href="{{ path('student_addlist', {'year': year}) }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Ajouter un lot</a>
+    <a href="{{ path('student_edit_ranking', {'year': year}) }}" class="btn btn-success"><span class="glyphicon glyphicon-wrench"></span> Classement</a>
 </p>
+
+<ul class="nav nav-tabs" role="tablist">
+    {% for y in years %}
+    <li {% if y == year %}class="active"{% endif %}><a href="{{ path('student_list_year', {'year': y}) }}">{{ y }}</a></li>
+    {% endfor %}
+</ul>
 
 <table class="table table-bordered table-striped table-condensed">
     <thead>
@@ -17,7 +23,7 @@
             <th>E-mail</th>
             <th>Promo</th>
             <th>Rang</th>
-            <th>Statut</th>
+            <th>État</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -30,7 +36,14 @@
             <td><a href="mailto:{{ s.email }}">{{ s.email }}</a></td>
             <td>{{ s.promo }}</td>
             <td>{{ s.rank }}</td>
-            <td>-</td>
+            <td>
+                {% if s.state == -1 %}Pas d'affectation
+                {% elseif s.state == 0 %}Choix des voeux
+                {% elseif s.state == 1 %}Voeux verrouillés
+                {% elseif s.state == 2 %}Attente du contrat
+                {% elseif s.state == 3 %}Contrat validé
+                {% elseif s.state == 4 %}À l'étranger{% endif %}
+            </td>
             <td>
                 <a href="{{ path('student_edit', {'id': s.id}) }}" title="Modifer" style="margin: 0 5px;"><span class="glyphicon glyphicon-wrench" style="color: #939090;"></span></a>
                 <a href="{{ path('student_remove', {'id': s.id}) }}" title="Supprimer" style="margin: 0 5px;"><span class="glyphicon glyphicon-remove" style="color: #CE0404;"></span></a>

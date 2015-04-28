@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Student
  *
  * @ORM\Table(name="students")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Mobility\StudentBundle\Entity\StudentRepository")
  */
 class Student
 {
@@ -70,6 +70,13 @@ class Student
      * @ORM\Column(name="state", type="integer")
      */
     private $state;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="year", type="integer")
+     */
+    private $year;
     
     /**
      * @ORM\OneToMany(targetEntity="Mobility\StudentBundle\Entity\Wish", mappedBy="student", cascade={"remove"})
@@ -85,6 +92,14 @@ class Student
 
         srand(time());
         $this->auth = sha1(rand());
+        
+        $now = new \DateTime();
+        // Si mois >= sept, on prend l'année suivante
+        if ($now->format('n') >= 9) {
+            $this->year = $now->format('Y') + 1;
+        } else {
+            $this->year = $now->format('Y');
+        }
     }
 
     /**
@@ -266,6 +281,29 @@ class Student
     public function getRank()
     {
         return $this->rank;
+    }
+
+    /**
+     * Set year
+     *
+     * @param integer $year
+     * @return Student
+     */
+    public function setYear($year)
+    {
+        $this->year = $year;
+
+        return $this;
+    }
+
+    /**
+     * Get year
+     *
+     * @return integer 
+     */
+    public function getYear()
+    {
+        return $this->year;
     }
 
     /**

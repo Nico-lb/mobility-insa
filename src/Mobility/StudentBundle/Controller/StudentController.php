@@ -47,7 +47,7 @@ class StudentController extends Controller
         $wish = new Wish();
         $wish->setStudent($student);
         $wish->setPriority(count($student->getWishes())+1);
-        $form = $this->createForm(new WishType(), $wish);
+        $form = $this->createForm(new WishType(array('activeOnly' => true)), $wish);
         
         $request = $this->get('request');
         if ($request->getMethod() == 'POST') {
@@ -97,7 +97,7 @@ class StudentController extends Controller
         }
 
         if ($editWish != null) {
-            $form = $this->createForm(new WishType(), $editWish);
+            $form = $this->createForm(new WishType(array('activeOnly' => true)), $editWish);
         
             $request = $this->get('request');
             if ($request->getMethod() == 'POST') {

@@ -18,9 +18,12 @@ class WishRepository extends EntityRepository {
         return $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function maxChoices() {
+    public function maxChoices($year) {
         $qb = $this->createQueryBuilder('w')
                 ->select('count(w)')
+                ->leftJoin('w.student', 's')
+                ->where('s.year = :year')
+                ->setParameter('year', $year)
                 ->groupBy('w.student');
 
 		$res = $qb->getQuery()->getScalarResult();
