@@ -60,6 +60,8 @@ class AdminController extends Controller
                     $student->setPromo((int)$line_data[3]);
                     $student->setYear($year);
                     $em->persist($student);
+
+                    $this->sendStudentCreatedMail($student);
                 }
             }
 
@@ -87,6 +89,8 @@ class AdminController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($student);
                 $em->flush();
+                
+                $this->sendStudentCreatedMail($student);
                 
                 return $this->redirect($this->generateUrl('student_list_year', array('year' => $student->getYear())));
             }
@@ -361,5 +365,14 @@ class AdminController extends Controller
         $em->flush();
 
         return $this->redirect($this->generateUrl('admin_student_wishes', array('id' => $student->getId())));
+    }
+    
+    private function sendStudentCreatedMail(Student $student) {
+        $message = \Swift_Message::newInstance()
+                ->setSubject('Mobilité à l\'étranger : Accès à votre compte et voeux de mobilité')
+                ->setFrom($this->container->getParameter('admin_email'))
+                ->setTo($student->getEmail())
+                ->setBody($this->renderView('MobilityStudentBundle:Admin:studentCreated.html.twig', array('student' => $student)), 'text/html');
+        $this->get('mailer')->send($message);
     }
 }

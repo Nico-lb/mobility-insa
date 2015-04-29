@@ -1,0 +1,9 @@
+<p>
+    Bonjour {{ student.firstname|title }}, ceci est un message automatique vous informant que votre compte vient d'être créé sur le site de gestion des mobilités internationales du département Informatique.<br />
+    Cliquez sur le lien suivant pour choisir vos voeux :<br />
+     <a href="{{ url('student_login', {'id': student.id, 'auth': student.auth}) }}">{{ url('student_login', {'id': student.id, 'auth': student.auth}) }}</a>.
+</p>
+
+{% include ':Mail:warningSecurity.html.twig' %}
+
+{% include ':Mail:emailSignature.html.twig' %}
