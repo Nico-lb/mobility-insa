@@ -271,6 +271,16 @@ class AdminController extends Controller
      * @Template()
      */
     public function lockAction(Year $year) {
+        $repo_students = $this->getDoctrine()->getManager()->getRepository('MobilityStudentBundle:Student');
+
+        if ($repo_students->countByState($year, 0) > 0) {
+            $this->get('session')->getFlashBag()->add('error', 'Erreur : certains étudiants peuvent encore changer leurs voeux.');
+            return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year)));
+        } else if ($repo_students->countByNotState($year, 1) > 0) {
+            $this->get('session')->getFlashBag()->add('error', 'Erreur : certains étudiants ont un état incohérent.');
+            return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year)));
+        }
+
         return array('year' => $year->getYear());
     }
     
