@@ -60,12 +60,12 @@ class AdminController extends Controller
                     $student->setPromo((int)$line_data[3]);
                     $student->setYear($year);
                     $em->persist($student);
+                    $em->flush();
 
                     $this->sendStudentCreatedMail($student);
                 }
             }
 
-            $em->flush();
             return $this->redirect($this->generateUrl('student_list_year', array('year' => $year)));
         }
         
@@ -89,7 +89,7 @@ class AdminController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($student);
                 $em->flush();
-                
+
                 $this->sendStudentCreatedMail($student);
                 
                 return $this->redirect($this->generateUrl('student_list_year', array('year' => $student->getYear())));
