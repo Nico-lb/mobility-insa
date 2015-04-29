@@ -16,6 +16,10 @@ class PlacementController extends Controller
      * @Template()
      */
     public function listAction(Year $year, Student $student, $auth) {
+        if (strtolower($student->getAuth()) != strtolower($auth)) {
+            return $this->redirect($this->generateUrl('student_loginreset'));
+        }
+
         if (!$year->getPlacementsPublic()) return $this->redirect($this->generateUrl('main_index'));
 
     	$repo = $this->getDoctrine()->getManager()->getRepository('MobilityPlacementBundle:Placement');

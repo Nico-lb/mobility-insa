@@ -295,11 +295,20 @@ class AdminController extends Controller
         }
         
         $em = $this->getDoctrine()->getManager();
-        $repo = $this->getDoctrine()->getManager()->getRepository('MobilityPlacementBundle:Placement');
-        $placements = $repo->getPlacements($year);
+
+        $repo_students = $em->getRepository('MobilityStudentBundle:Student');
+        $students = $repo_students->getStudents($year);
+        foreach ($students as $s) {
+            $s->setState(-1);
+        }
+
+        $repo_placements = $em->getRepository('MobilityPlacementBundle:Placement');
+        $placements = $repo_placements->getPlacements($year);
         foreach ($placements as $p) {
             $p->setState(2);
+            $p->getStudent()->setState(2);
         }
+
         $year->setPlacementsLocked(true);
         // TODO : mail
 

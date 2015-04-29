@@ -8,7 +8,9 @@
 	        <tr>
 	            <th>Voeu</th>
 	            <th>Université</th>
-	            <th>Actions</th>
+	            {% if student.state == 0 %}
+	            	<th>Actions</th>
+        		{% endif %}
 	        </tr>
 	    </thead>
 	    
@@ -18,27 +20,31 @@
 	            <td>{{ w.priority }}</td>
 	            <td>{{ w.university.name }}</td>
 
-	            <td>
-	                <a href="{{ path('student_editwish', {'id':student.id, 'auth':student.auth, 'wish':w.priority}) }}" title="Modifer" style="margin: 0 5px;"><span class="glyphicon glyphicon-wrench" style="color: #939090;"></span></a>
-	                <a href="{{ path('student_removewish', {'id':student.id, 'auth':student.auth, 'wish':w.priority}) }}" title="Supprimer" style="margin: 0 5px;"><span class="glyphicon glyphicon-remove" style="color: #939090;"></span></a>
-	            </td>
+	            {% if student.state == 0 %}
+		            <td>
+		                <a href="{{ path('student_editwish', {'id':student.id, 'auth':student.auth, 'wish':w.priority}) }}" title="Modifer" style="margin: 0 5px;"><span class="glyphicon glyphicon-wrench" style="color: #939090;"></span></a>
+		                <a href="{{ path('student_removewish', {'id':student.id, 'auth':student.auth, 'wish':w.priority}) }}" title="Supprimer" style="margin: 0 5px;"><span class="glyphicon glyphicon-remove" style="color: #939090;"></span></a>
+		            </td>
+        		{% endif %}
 	        </tr>
 	        {% endfor %}
 	    </tbody>
 	</table>
 
-    <form method="post" class="mobility-form" {{ form_enctype(form) }}>
-	    {% form_theme form ':Form:form_errors.html.twig' %}
+    {% if student.state == 0 %}
+	    <form method="post" class="mobility-form" {{ form_enctype(form) }}>
+		    {% form_theme form ':Form:form_errors.html.twig' %}
 
-	    {{ form_errors(form) }}
+		    {{ form_errors(form) }}
 
-	    <p>
-	        {{ form_label(form.university) }}
-	    	{{ form_errors(form.university) }}
-	        {{ form_widget(form.university) }}
-	        <input type="submit" class="btn btn-success" style="margin-left: 20px;" value="Ajouter" />
-	    </p>
+		    <p>
+		        {{ form_label(form.university) }}
+		    	{{ form_errors(form.university) }}
+		        {{ form_widget(form.university) }}
+		        <input type="submit" class="btn btn-success" style="margin-left: 20px;" value="Ajouter" />
+		    </p>
 
-	    {{ form_rest(form) }}
-	</form>
+		    {{ form_rest(form) }}
+		</form>
+	{% endif %}
 {% endblock %}

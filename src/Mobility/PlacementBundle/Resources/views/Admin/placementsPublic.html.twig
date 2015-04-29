@@ -1,6 +1,7 @@
 <p>
     Bonjour {{ student.firstname|title }}, les affectations dans les différentes universités ont été mises à jour.<br />
-    Cliquez sur le lien suivant pour visualiser la répartition, <a href="{{ url('public_placements', {'year': student.year, 'id': student.id, 'auth': student.auth}) }}">{{ url('public_placements', {'year': student.year, 'id': student.id, 'auth': student.auth}) }}</a>.
+    Cliquez sur le lien suivant pour visualiser la répartition :<br />
+     <a href="{{ url('public_placements', {'year': student.year, 'id': student.id, 'auth': student.auth}) }}">{{ url('public_placements', {'year': student.year, 'id': student.id, 'auth': student.auth}) }}</a>.
 </p>
 
 {% include ':Mail:warningSecurity.html.twig' %}

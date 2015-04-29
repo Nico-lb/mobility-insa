@@ -1,0 +1,27 @@
+{% extends "MobilityStudentBundle::layout.html.twig" %}
+
+{% block page_title %}{{ student.firstname|title }} {{ student.surname|title }}{% endblock %}
+
+{% block content_body %}
+	<p>Vous avez été affecté à <strong>{{ placement.university.name }}</strong>.</p>
+
+	<p>
+		Les démarches à réaliser sont les suivantes :<br />
+		<ul>
+			<li>Démarche 1</li>
+			<li>Démarche 2</li>
+			<li>Démarche 3</li>
+			<li>Démarche 4</li>
+		</ul>
+	</p>
+
+	<p>
+		Voici les documents utiles :<br />
+		<ul>
+			<li>Doc 1</li>
+			<li>Doc 2</li>
+			<li>Doc 3</li>
+			<li>Doc 4</li>
+		</ul>
+	</p>
+{% endblock %}

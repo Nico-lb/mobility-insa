@@ -1,0 +1,32 @@
+{% extends "MobilityStudentBundle::layout.html.twig" %}
+
+{% block page_title %}{{ student.firstname|title }} {{ student.surname|title }}{% endblock %}
+
+{% block content_body %}
+	<p>Vous avez été affecté à <strong>{{ placement.university.name }}</strong>.</p>
+
+	<p>
+		Votre contrat d'étude a été validé par votre correspondant RI.<br />
+		Vous pouvez le récupérer en <a href="">cliquant ici</a>.
+	</p>
+
+	<p>
+		Si vous avez besoin d'apporter une modification à votre contrat d'étude (changement de matière par exemple), veuillez télécharger le document suivant :
+		<a href="">Modification du contrat d'étude</a>, le remplir et l'uploader via le formulaire ci-dessous :<br />
+		<form>
+			<input type="file" /> <input type="submit" />
+		</form>
+	</p>
+
+	<p>
+		Veuillez compléter le tableau suivant avec les notes que vous avez obtenu.<br />
+		Si vous n'avez pas encore de justificatif, vous pouvez laisser le champ vide et le compléter plus tard.
+
+		<table>
+		</table>
+		
+		<form>
+
+		</form>
+	</p>
+{% endblock %}
