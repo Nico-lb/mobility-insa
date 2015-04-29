@@ -270,7 +270,7 @@ class AdminController extends Controller
      * @Route("/lock-{year}", requirements={"year" = "\d+"}, name="placements_lock")
      * @Template()
      */
-    public function lockAction(Year $year) {
+    public function lockAction($year) {
         $repo_students = $this->getDoctrine()->getManager()->getRepository('MobilityStudentBundle:Student');
 
         if ($repo_students->countByState($year, 0) > 0) {
@@ -281,7 +281,7 @@ class AdminController extends Controller
             return $this->redirect($this->generateUrl('placement_list_year', array('year' => $year)));
         }
 
-        return array('year' => $year->getYear());
+        return array('year' => $year);
     }
     
     /**
