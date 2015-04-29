@@ -18,10 +18,9 @@
 	<p>
 		Voici les documents utiles :<br />
 		<ul>
-			<li>Doc 1</li>
-			<li>Doc 2</li>
-			<li>Doc 3</li>
-			<li>Doc 4</li>
+			{% for d in documents %}
+	        <li><a href="{{ asset(d.webPath) }}">{{ d.name }}</a></li>
+	        {% endfor %}
 		</ul>
 	</p>
 {% endblock %}

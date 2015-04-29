@@ -1,0 +1,7 @@
+Bernard;Bob;bob.bernard@insa-rennes.fr;3
+Deguerre;Kevin;kevin.deguerre@insa-rennes.fr;3
+Dupont;Claude;cdupont@insa-rennes.fr;4
+Le Gall;Charles;charles.le-gall@insa-rennes.fr;3
+Marteau;Robert;robert.marteau@insa-rennes.fr;4
+Sacquet;Bilbo;bilbo.sacquet@insa-rennes.fr;4
+Sacquet;Frodon;frodon.sacquet@insa-rennes.fr;3

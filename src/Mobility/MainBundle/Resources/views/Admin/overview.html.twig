@@ -5,11 +5,61 @@
 {% block content %}
 <div class="well">
     {% if startYear %}
-	<p style="text-align: right;">
+	<p>
 		<a href="{{ path('start_year') }}" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span> Nouvelle année</a>
 	</p>
-	{% else %}
-    	{{ render(controller('MobilityMainBundle:Admin:manageYear', {'year': years[0].year})) }}
+	<hr />
 	{% endif %}
+
+	<h1>Documents téléchargeables</h1>
+
+	<table class="table table-bordered table-striped table-condensed">
+		<legend>Début des démarches (récupération du contrat d'étude)</legend>
+
+	    <thead>
+	        <tr>
+	            <th>Nom</th>
+	            <th>URL</th>
+	            <th>Action</th>
+	        </tr>
+	    </thead>
+	    
+	    <tbody>
+	        {% for d in step1_documents %}
+	        <tr>
+	            <td>{{ d.name }}</td>
+	            <td><a href="{{ asset(d.webPath) }}">{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset(d.webPath) }}</a></td>
+	            <td>
+	                <a href="{{ path('document_remove', {'id': d.id}) }}" title="Supprimer" style="margin: 0 5px;"><span class="glyphicon glyphicon-remove" style="color: #CE0404;"></span></a>
+	            </td>
+	        </tr>
+	        {% endfor %}
+	    </tbody>
+	</table>
+
+    <form method="post" class="mobility-form" {{ form_enctype(form1) }}>      
+        {% form_theme form1 ':Form:form_errors.html.twig' %}
+
+        {{ form_errors(form1) }}
+
+	    {{ form_errors(form1.name) }}
+	    <p>
+	        {{ form_label(form1.name) }}
+	        {{ form_widget(form1.name) }}
+	    </p>
+
+        {{ form_errors(form1.file) }}
+        <p>
+            {{ form_label(form1.file) }}
+            {{ form_widget(form1.file) }}
+            <span class="info" style="margin-left: 20px">Taille maximale autorisée : 20Mo</span>
+        </p>
+
+        {{ form_rest(form1) }}
+
+    <p>
+        <input type="submit" class="btn btn-primary push" value="Envoyer" />
+    </p>
+</form>
 </div>
 {% endblock %}

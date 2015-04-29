@@ -83,8 +83,11 @@ class StudentController extends Controller
 
         $repo = $this->getDoctrine()->getManager()->getRepository('MobilityPlacementBundle:Placement');
         $placement = $repo->findOneBy(array('student' => $student));
+
+        $repo_doc = $this->getDoctrine()->getManager()->getRepository('MobilityMainBundle:Document');
+        $docs = $repo_doc->findBy(array('location' => 'step1'), array('name' => 'asc'));
         
-        return array('student' => $student, 'placement' => $placement);
+        return array('student' => $student, 'placement' => $placement, 'documents' => $docs);
     }
 
     /**

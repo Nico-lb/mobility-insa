@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Mobility\MainBundle\Entity\Year;
+use Mobility\MainBundle\Entity\Document;
+use Mobility\MainBundle\Form\DocumentType;
 
 /**
  * @Route("/admin")
@@ -25,6 +27,7 @@ class AdminController extends Controller
      * @Template()
      */
     public function overviewAction() {
+        $request = $this->get('request');
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository('MobilityMainBundle:Year');
         $years = $repo->findBy(array(), array('year' => 'desc'));
@@ -39,26 +42,37 @@ class AdminController extends Controller
         }
         $startYear = ($repo->findOneBy(array('year' => $year)) == null);
 
-        return array('startYear' => $startYear, 'years' => $years);
+        $repo_doc = $em->getRepository('MobilityMainBundle:Document');
+        $step1_docs = $repo_doc->findBy(array('location' => 'step1'), array('name' => 'asc'));
+
+        $step1_doc = new Document();
+        $step1_doc->setLocation('step1');
+        $step1_docform = $this->createForm(new DocumentType(), $step1_doc);
+
+        if ($request->getMethod() == 'POST') {
+            $step1_docform->submit($request);
+            
+            if ($step1_docform->isValid()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($step1_doc);
+                $em->flush();
+                
+                return $this->redirect($this->generateUrl('overview'));
+            }
+        }
+
+        return array('startYear' => $startYear, 'step1_documents' => $step1_docs, 'form1' => $step1_docform->createView());
     }
 
     /**
-     * @Route("/overview-{year}", requirements={"year" = "\d+"}, name="overview_year")
-     * @Template()
+     * @Route("/remove-doc-{id}", requirements={"id" = "\d+"}, name="document_remove")
      */
-    public function overviewYearAction(Year $year) {
-        return array('year' => $year);
-    }
-    
-    /**
-     * @Template()
-     */
-    public function manageYearAction(Year $year) {
-        $repo_students = $this->getDoctrine()->getManager()->getRepository('MobilityStudentBundle:Student');
-        $lock_button = $repo_students->countByState($year, 0) > 0;
-        $unlock_button = $repo_students->countByNotState($year, 1) == 0;
+    public function removeDocumentAction(Document $doc) {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($doc);
+        $em->flush();
 
-        return array('year' => $year->getYear(), 'lock_button' => $lock_button, 'unlock_button' => $unlock_button, 'placements_public' => $year->getPlacementsPublic());
+        return $this->redirect($this->generateUrl('overview'));
     }
 
     /**
@@ -84,6 +98,6 @@ class AdminController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('overview_year', array('year' => $year)));
+        return $this->redirect($this->generateUrl('student_list_year', array('year' => $year)));
     }
 }

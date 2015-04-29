@@ -1,9 +1,0 @@
-{% extends "MobilityMainBundle:Admin:layout.html.twig" %}
-
-{% block page_title %}<a href="{{ path('main_admin') }}">Administration</a> - <a href="{{ path('overview') }}">Tableau de bord</a> - Année {{ year.year }}{% endblock %}
-
-{% block content %}
-<div class="well">
-    {{ render(controller('MobilityMainBundle:Admin:manageYear', {'year': year.year})) }}
-</div>
-{% endblock %}
