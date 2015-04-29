@@ -50,7 +50,7 @@ class Placement
     /**
      * @var string
      *
-     * @ORM\Column(name="comment", type="string")
+     * @ORM\Column(name="comment", type="string", nullable=true)
      */
     private $comment;
 
