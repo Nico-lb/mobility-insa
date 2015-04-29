@@ -83,6 +83,11 @@ class Student
      * @ORM\OrderBy({"priority" = "ASC"})
      */
     private $wishes;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Mobility\PlacementBundle\Entity\Placement", mappedBy="student", cascade={"remove"})
+     */
+    private $placements;
 
     
     public function __construct() {
