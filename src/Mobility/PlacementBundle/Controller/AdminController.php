@@ -88,8 +88,8 @@ class AdminController extends Controller
         $students_4a = $repo_students->getRankedStudents($year, 4);
         $students_3a = $repo_students->getRankedStudents($year, 3);
 
-        $j = 0; $k = 0;
-        for ($i=0; $i < count($students_4a) + count($students_3a); $i++) {
+        $i = 0; $j = 0;
+        for ($i=0; $i <= (count($students_4a) - 1) + (count($students_3a) - 1); $i++) {
             $s = null;
 
             if ($j >= count($students_4a)) {
